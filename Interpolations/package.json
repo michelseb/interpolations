@@ -1,0 +1,13 @@
+{
+  "name": "com.zeplink.interpolations",
+  "version": "1.0.0",
+  "displayName": "Interpolations",
+  "description": "A handy helper class for interpolating values such a transform positions, colors...",
+  "author": {
+    "name": "S\u00e9bastien Michel",
+    "email": "sebastien.michel60@gmail.com"
+  },
+  "dependencies": {
+    "com.unity.render-pipelines.universal": "17.3.0"
+  }
+}
