@@ -1,0 +1,235 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Rendering.Universal;
+
+namespace ZepLink.Interpolations
+{
+    public abstract class Interpolation<T, U> where T : Object where U : struct
+    {
+        public T Reference { get; }
+        public U Value { get; protected set; }
+        public U Origin { get; }
+        public U Target { get; }
+        public float Duration { get; }
+
+        public Interpolation(T reference, U origin, U target, float duration)
+        {
+            Reference = reference;
+            Value = origin;
+            Origin = origin;
+            Target = target;
+            Duration = duration;
+        }
+
+        public Interpolation(T reference, U value, U origin, U target, float duration)
+        {
+            Reference = reference;
+            Value = value;
+            Origin = origin;
+            Target = target;
+            Duration = duration;
+        }
+
+        internal abstract void Process(ref float elapsed);
+        internal abstract void Apply();
+
+        internal virtual void Complete()
+        {
+            Value = Target;
+        }
+    }
+
+    public class GravityValueInterpolation : Interpolation<Rigidbody2D, float>
+    {
+        public GravityValueInterpolation(Rigidbody2D reference, float origin, float target, float duration) : base(reference, origin, target, duration) { }
+        public GravityValueInterpolation(Rigidbody2D reference, float value, float origin, float target, float duration) : base(reference, value, origin, target, duration) { }
+
+        internal override void Apply()
+        {
+            Reference.gravityScale = Value;
+        }
+
+        internal override void Process(ref float elapsed)
+        {
+            Value = Mathf.Lerp(Origin, Target, elapsed / Duration);
+            elapsed += Time.deltaTime;
+        }
+    }
+
+    public class TransformPositionInterpolation : Interpolation<Transform, Vector3>
+    {
+        public float Speed { get; }
+
+        public TransformPositionInterpolation(Transform transform, Vector3 origin, Vector3 target, float duration, float speed) : base(transform, origin, target, duration)
+        {
+            Speed = speed;
+        }
+
+        public TransformPositionInterpolation(Transform transform, Vector3 origin, Vector3 target, float duration) : this(transform, origin, target, duration, 1) { }
+        public TransformPositionInterpolation(Transform transform, Vector3 target, float duration) : this(transform, transform.position, target, duration) { }
+        public TransformPositionInterpolation(Transform transform, Vector3 target, float duration, float speed) : this(transform, transform.position, target, duration, speed) { }
+
+        internal override void Process(ref float elapsed)
+        {
+            Value = Vector3.Lerp(Origin, Target, elapsed / Duration);
+            elapsed += Time.deltaTime * Speed;
+        }
+
+        internal override void Apply()
+        {
+            Reference.position = Value;
+        }
+
+        internal override void Complete()
+        {
+            Reference.position = Target;
+        }
+    }
+
+    public class TransformRotationInterpolation : Interpolation<Transform, Quaternion>
+    {
+        public TransformRotationInterpolation(Transform transform, Quaternion origin, Quaternion target, float duration) : base(transform, origin, target, duration) { }
+        public TransformRotationInterpolation(Transform transform, Quaternion target, float duration) : this(transform, transform.rotation, target, duration) { }
+
+        internal override void Process(ref float elapsed)
+        {
+            Value = Quaternion.Lerp(Origin, Target, elapsed / Duration);
+            elapsed += Time.deltaTime;
+        }
+
+        internal override void Apply()
+        {
+            Reference.rotation = Value;
+        }
+    }
+
+
+    public class TransformScaleInterpolation : Interpolation<Transform, Vector3>
+    {
+        public TransformScaleInterpolation(Transform transform, Vector3 origin, Vector3 target, float duration) : base(transform, origin, target, duration) { }
+        public TransformScaleInterpolation(Transform transform, Vector3 target, float duration) : this(transform, transform.localScale, target, duration) { }
+
+        internal override void Process(ref float elapsed)
+        {
+            Value = Vector3.Lerp(Origin, Target, elapsed / Duration);
+            elapsed += Time.deltaTime;
+        }
+
+        internal override void Apply()
+        {
+            Reference.localScale = Value;
+        }
+    }
+
+    public class LightIntensityInterpolation : Interpolation<Light2D, float>
+    {
+        public LightIntensityInterpolation(Light2D light, float value, float origin, float target, float duration) : base(light, value, origin, target, duration) { }
+
+        internal override void Process(ref float elapsed)
+        {
+            Value = Mathf.Lerp(Origin, Target, elapsed / Duration);
+            elapsed += Time.deltaTime;
+        }
+
+        internal override void Apply()
+        {
+            Reference.intensity = Value;
+        }
+    }
+
+    public class BloomIntensityInterpolation : Interpolation<Bloom, float>
+    {
+        public BloomIntensityInterpolation(Bloom reference, float origin, float target, float duration) : base(reference, origin, target, duration) { }
+
+        internal override void Apply()
+        {
+            Reference.intensity.value = Value;
+        }
+
+        internal override void Process(ref float elapsed)
+        {
+            Value = Mathf.Lerp(Origin, Target, elapsed / Duration);
+            elapsed += Time.deltaTime;
+        }
+    }
+
+    public class CameraColorInterpolation : Interpolation<Camera, Color>
+    {
+        public CameraColorInterpolation(Camera reference, Color origin, Color target, float duration) : base(reference, origin, target, duration) { }
+
+        internal override void Apply()
+        {
+            Reference.backgroundColor = Value;
+        }
+
+        internal override void Process(ref float elapsed)
+        {
+            Value = Color.Lerp(Origin, Target, elapsed / Duration);
+            elapsed += Time.deltaTime;
+        }
+    }
+
+    public class AudioVolumeInterpolation : Interpolation<AudioSource, float>
+    {
+        public AudioVolumeInterpolation(AudioSource audio, float value, float origin, float target, float duration) : base(audio, value, origin, target, duration) { }
+        public AudioVolumeInterpolation(AudioSource audio, float origin, float target, float duration) : this(audio, origin, origin, target, duration) { }
+
+        internal override void Process(ref float elapsed)
+        {
+            Value = Mathf.Lerp(Origin, Target, elapsed / Duration);
+            elapsed += Time.deltaTime;
+        }
+
+        internal override void Apply()
+        {
+            Reference.volume = Value;
+        }
+    }
+
+    public static class InterpolationHelper<T, U> where T : Component where U : struct
+    {
+        public static IEnumerator Interpolate(Interpolation<T, U> interpolation)
+        {
+            float elapsed = 0f;
+
+            while (elapsed < interpolation.Duration)
+            {
+                interpolation.Process(ref elapsed);
+                interpolation.Apply();
+
+                yield return null;
+            }
+
+            interpolation.Complete();
+        }
+
+        public static IEnumerator InterpolateList(IList<Interpolation<T, U>> interpolations)
+        {
+            if (interpolations == null || interpolations.Count == 0)
+                yield break;
+
+            float[] elapsed = new float[interpolations.Count];
+
+            // TODO => Fix : not gonna work with a while loop inside
+            for (var i = 0; i < interpolations.Count; i++)
+            {
+                var interpolation = interpolations[i];
+                var e = elapsed[i];
+
+                while (e < interpolation.Duration)
+                {
+                    interpolation.Process(ref e);
+                    interpolation.Apply();
+                }
+
+                yield return null;
+            }
+
+            foreach (var interpolation in interpolations)
+            {
+                interpolation.Complete();
+            }
+        }
+    }
+}
