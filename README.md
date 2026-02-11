@@ -38,7 +38,8 @@ May you have any questions, email me at sebastien.michel60@gmail.com
 Sebastien MICHEL
 
 ## Version History
-
+* 2.1.1
+    * Adding onEnd event to interpolationController
 * 2.1.0
     * Adding an onEnd event on interpolation executions
 * 2.0.0
