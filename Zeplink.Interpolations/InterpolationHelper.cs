@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -7,7 +8,7 @@ namespace ZepLink.Interpolations
 {
     internal static class InterpolationHelper
     {
-        public static IEnumerator Interpolate(IInterpolation interpolation)
+        public static IEnumerator Interpolate(IInterpolation interpolation, Action onEnd = null)
         {
             float elapsedTime = 0f;
 
@@ -24,9 +25,10 @@ namespace ZepLink.Interpolations
             }
 
             interpolation.Complete();
+            onEnd?.Invoke();
         }
 
-        public static IEnumerator InterpolateListSequential(IList<IInterpolation> interpolations)
+        public static IEnumerator InterpolateListSequential(IList<IInterpolation> interpolations, Action onEnd = null)
         {
             if (interpolations == null || interpolations.Count == 0)
                 yield break;
@@ -50,9 +52,11 @@ namespace ZepLink.Interpolations
                 interpolation.Complete();
                 elapsedTime = 0f;
             }
+
+            onEnd?.Invoke();
         }
 
-        public static IEnumerator InterpolateListSimultaneous(IList<IInterpolation> interpolations)
+        public static IEnumerator InterpolateListSimultaneous(IList<IInterpolation> interpolations, Action onEnd = null)
         {
             if (interpolations == null || interpolations.Count == 0)
                 yield break;
@@ -77,6 +81,8 @@ namespace ZepLink.Interpolations
                 elapsedTime += Time.deltaTime;
                 yield return null;
             }
+
+            onEnd?.Invoke();
         }
     }
 }
