@@ -5,14 +5,19 @@ namespace ZepLink.Interpolations
 {
     public class InterpolationController : MonoBehaviour
     {
-        public void Run<T, U>(Interpolation<T, U> interpolation) where T : Component where U : struct
+        public void Run(IInterpolation interpolation)
         {
-            StartCoroutine(InterpolationHelper<T, U>.Interpolate(interpolation));
+            StartCoroutine(InterpolationHelper.Interpolate(interpolation));
         }
 
-        public void RunList<T, U>(IList<Interpolation<T, U>> interpolations) where T : Component where U : struct
+        public void RunListSequential(IList<IInterpolation> interpolations)
         {
-            StartCoroutine(InterpolationHelper<T, U>.InterpolateList(interpolations));
+            StartCoroutine(InterpolationHelper.InterpolateListSequential(interpolations));
+        }
+
+        public void RunListSimultaneous(IList<IInterpolation> interpolations)
+        {
+            StartCoroutine(InterpolationHelper.InterpolateListSimultaneous(interpolations));
         }
     }
 }
