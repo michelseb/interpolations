@@ -57,8 +57,6 @@ namespace ZepLink.Interpolations
             if (interpolations == null || interpolations.Count == 0)
                 yield break;
 
-
-            var interpolation = interpolations[i];
             var elapsedTime = 0f;
             var runningInterpolations = interpolations.Where(i => i.Duration > elapsedTime).ToList();
 
