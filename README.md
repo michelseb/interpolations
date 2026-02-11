@@ -39,6 +39,8 @@ Sebastien MICHEL
 
 ## Version History
 
+* 2.1.0
+    * Adding an onEnd event on interpolation executions
 * 2.0.0
 	* Major package reorganization (namespaces, interface definitions)
 	* You have more freedom in the way you manipulate your interpolations (access to Init/Process/Apply/Complete methods)
