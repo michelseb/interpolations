@@ -39,6 +39,8 @@ namespace ZepLink.Interpolations
             {
                 var interpolation = interpolations[i];
 
+                interpolation.Init();
+
                 while (elapsedTime < interpolation.Duration)
                 {
                     interpolation.Process(elapsedTime);
@@ -62,6 +64,11 @@ namespace ZepLink.Interpolations
                 yield break;
 
             var elapsedTime = 0f;
+
+            foreach (var interpolation in interpolations)
+            {
+                interpolation.Init();
+            }
 
             while (interpolations.Any())
             {
