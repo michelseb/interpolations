@@ -38,6 +38,8 @@ May you have any questions, email me at sebastien.michel60@gmail.com
 Sebastien MICHEL
 
 ## Version History
+* 2.1.2
+    * Fixed InterpolateListSimultaneous method
 * 2.1.1
     * Adding onEnd event to interpolationController
 * 2.1.0

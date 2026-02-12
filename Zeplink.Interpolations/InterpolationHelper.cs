@@ -62,21 +62,22 @@ namespace ZepLink.Interpolations
                 yield break;
 
             var elapsedTime = 0f;
-            var runningInterpolations = interpolations.Where(i => i.Duration > elapsedTime).ToList();
 
-            while (runningInterpolations.Any())
+            while (interpolations.Any())
             {
-                runningInterpolations.ForEach(i =>
+                for (var i = 0; i < interpolations.Count; i++)
                 {
-                    i.Process(elapsedTime);
-                    i.Apply();
+                    var interpolation = interpolations[i];
 
-                    if (elapsedTime >= i.Duration)
+                    interpolation.Process(elapsedTime);
+                    interpolation.Apply();
+
+                    if (elapsedTime >= interpolation.Duration)
                     {
-                        i.Complete();
-                        runningInterpolations.Remove(i);
+                        interpolation.Complete();
+                        interpolations.RemoveAt(i);
                     }
-                });
+                }
 
                 elapsedTime += Time.deltaTime;
                 yield return null;
