@@ -38,6 +38,8 @@ May you have any questions, email me at sebastien.michel60@gmail.com
 Sebastien MICHEL
 
 ## Version History
+* 3.0.0
+    * Introducing interpolation queue - can queue to sequential executions
 * 2.1.3
     * Added interpolation initialize in InterpolateList methods
 * 2.1.2

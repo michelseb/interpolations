@@ -28,34 +28,35 @@ namespace ZepLink.Interpolations
             onEnd?.Invoke();
         }
 
-        public static IEnumerator InterpolateListSequential(IList<IInterpolation> interpolations, Action onEnd = null)
+        public static IEnumerator ExecuteQueue(Queue<IInterpolation> queue)
         {
-            if (interpolations == null || interpolations.Count == 0)
+            if (queue == null)
                 yield break;
 
             float elapsedTime = 0f;
 
-            for (var i = 0; i < interpolations.Count; i++)
+            while (true)
             {
-                var interpolation = interpolations[i];
-
-                interpolation.Init();
-
-                while (elapsedTime < interpolation.Duration)
+                while (queue.TryDequeue(out IInterpolation interpolation))
                 {
-                    interpolation.Process(elapsedTime);
-                    interpolation.Apply();
+                    interpolation.Init();
 
-                    elapsedTime += Time.deltaTime;
+                    while (elapsedTime < interpolation.Duration)
+                    {
+                        interpolation.Process(elapsedTime);
+                        interpolation.Apply();
 
-                    yield return null;
+                        elapsedTime += Time.deltaTime;
+
+                        yield return null;
+                    }
+
+                    interpolation.Complete();
+                    elapsedTime = 0f;
                 }
 
-                interpolation.Complete();
-                elapsedTime = 0f;
+                yield return null;
             }
-
-            onEnd?.Invoke();
         }
 
         public static IEnumerator InterpolateListSimultaneous(IList<IInterpolation> interpolations, Action onEnd = null)

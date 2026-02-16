@@ -6,7 +6,7 @@ namespace ZepLink.Interpolations
     {
         public T Reference { get; }
         public U Value { get; protected set; }
-        public U Origin { get; }
+        public U Origin { get; protected set; }
         public U Target { get; }
         public float Duration { get; }
 
