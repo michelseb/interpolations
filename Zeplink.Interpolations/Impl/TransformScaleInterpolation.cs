@@ -1,9 +1,13 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace ZepLink.Interpolations.Impl
 {
     public class TransformScaleInterpolation : Interpolation<Transform, Vector3>
     {
+        public TransformScaleInterpolation(Transform transform, Func<Vector3> origin, Func<Vector3> target, float duration) : base(transform, origin, target, duration) { }
+        public TransformScaleInterpolation(Transform transform, Func<Vector3> target, float duration) : this(transform, () => transform.localScale, target, duration) { }
+
         public TransformScaleInterpolation(Transform transform, Vector3 origin, Vector3 target, float duration) : base(transform, origin, target, duration) { }
         public TransformScaleInterpolation(Transform transform, Vector3 target, float duration) : this(transform, transform.localScale, target, duration) { }
 

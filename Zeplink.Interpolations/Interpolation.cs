@@ -1,5 +1,4 @@
-﻿using NUnit.Framework.Interfaces;
-using System;
+﻿using System;
 
 namespace ZepLink.Interpolations
 {
@@ -9,6 +8,8 @@ namespace ZepLink.Interpolations
         public U Value { get; protected set; }
         public U Origin { get; protected set; }
         public U Target { get; private set; }
+        public Func<U> DeferredOrigin { get; protected set; }
+        public Func<U> DeferredTarget { get; protected set; }
         public float Duration { get; }
 
         protected Action _onStart;
@@ -32,7 +33,25 @@ namespace ZepLink.Interpolations
             Duration = duration;
         }
 
-        public virtual void Init() 
+        public Interpolation(T reference, Func<U> origin, Func<U> target, float duration)
+        {
+            Reference = reference;
+            Value = origin();
+            DeferredOrigin = origin;
+            DeferredTarget = target;
+            Duration = duration;
+        }
+
+        public Interpolation(T reference, U value, Func<U> origin, Func<U> target, float duration)
+        {
+            Reference = reference;
+            Value = value;
+            DeferredOrigin = origin;
+            DeferredTarget = target;
+            Duration = duration;
+        }
+
+        public virtual void Init()
         {
             _onStart?.Invoke();
         }

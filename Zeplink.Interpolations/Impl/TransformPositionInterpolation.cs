@@ -1,10 +1,16 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace ZepLink.Interpolations.Impl
 {
     public class TransformPositionInterpolation : Interpolation<Transform, Vector3>
     {
         private bool _startAtPosition;
+        public TransformPositionInterpolation(Transform transform, Func<Vector3> origin, Func<Vector3> target, float duration) : base(transform, origin, target, duration) { }
+        public TransformPositionInterpolation(Transform transform, Func<Vector3> target, float duration) : this(transform, () => transform.position, target, duration)
+        {
+            _startAtPosition = true;
+        }
         public TransformPositionInterpolation(Transform transform, Vector3 origin, Vector3 target, float duration) : base(transform, origin, target, duration) { }
         public TransformPositionInterpolation(Transform transform, Vector3 target, float duration) : this(transform, transform.position, target, duration) 
         {

@@ -1,9 +1,13 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace ZepLink.Interpolations.Impl
 {
     public class TransformRotationInterpolation : Interpolation<Transform, Quaternion>
     {
+        public TransformRotationInterpolation(Transform transform, Func<Quaternion> origin, Func<Quaternion> target, float duration) : base(transform, origin, target, duration) { }
+        public TransformRotationInterpolation(Transform transform, Func<Quaternion> target, float duration) : this(transform, () => transform.rotation, target, duration) { }
+
         public TransformRotationInterpolation(Transform transform, Quaternion origin, Quaternion target, float duration) : base(transform, origin, target, duration) { }
         public TransformRotationInterpolation(Transform transform, Quaternion target, float duration) : this(transform, transform.rotation, target, duration) { }
 

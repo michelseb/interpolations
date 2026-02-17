@@ -1,9 +1,11 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace ZepLink.Interpolations.Impl
 {
     public class SpriteTransparencyInterpolation : Interpolation<SpriteRenderer, float>
     {
+        public SpriteTransparencyInterpolation(SpriteRenderer reference, Func<float> origin, Func<float> target, float duration) : base(reference, origin, target, duration) { }
         public SpriteTransparencyInterpolation(SpriteRenderer reference, float origin, float target, float duration) : base(reference, origin, target, duration) { }
 
         private Color _referenceColor;
