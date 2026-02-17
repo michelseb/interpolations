@@ -32,6 +32,7 @@ namespace ZepLink.Interpolations.Impl
         public override void Complete()
         {
             Reference.position = Target;
+            _onEnd?.Invoke();
         }
     }
 }

@@ -1,14 +1,17 @@
-﻿using UnityEngine;
+﻿using NUnit.Framework.Interfaces;
+using System;
 
 namespace ZepLink.Interpolations
 {
-    public abstract class Interpolation<T, U> : IInterpolation where T : Object where U : struct
+    public abstract class Interpolation<T, U> : IInterpolation where T : UnityEngine.Object where U : struct
     {
         public T Reference { get; }
         public U Value { get; protected set; }
         public U Origin { get; protected set; }
-        public U Target { get; }
+        public U Target { get; private set; }
         public float Duration { get; }
+
+        protected Action _onEnd;
 
         public Interpolation(T reference, U origin, U target, float duration)
         {
@@ -37,6 +40,13 @@ namespace ZepLink.Interpolations
         public virtual void Complete()
         {
             Value = Target;
+            _onEnd?.Invoke();
+        }
+
+        public virtual Interpolation<T, U> SetOnEnd(Action onEnd)
+        {
+            _onEnd = onEnd;
+            return this;
         }
     }
 }
