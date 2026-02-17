@@ -38,6 +38,8 @@ May you have any questions, email me at sebastien.michel60@gmail.com
 Sebastien MICHEL
 
 ## Version History
+* 3.3.1
+    * Fixing deferred init
 * 3.3.0
     * Introducing deferred executions
 * 3.2.0

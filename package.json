@@ -1,6 +1,6 @@
 {
   "name": "com.zeplink.interpolations",
-  "version": "3.3.0",
+  "version": "3.3.1",
   "displayName": "Interpolations",
   "description": "A handy helper class for interpolating values such a transform positions, colors...",
   "author": {

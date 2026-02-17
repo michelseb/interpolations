@@ -53,6 +53,16 @@ namespace ZepLink.Interpolations
 
         public virtual void Init()
         {
+            if (DeferredOrigin != default)
+            {
+                Origin = DeferredOrigin();
+            }
+
+            if (DeferredTarget != default)
+            {
+                Target = DeferredTarget();
+            }
+
             _onStart?.Invoke();
         }
 
