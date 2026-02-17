@@ -10,6 +10,8 @@ namespace ZepLink.Interpolations.Impl
 
         public override void Init()
         {
+            base.Init();
+
             _referenceColor = Reference.color;
         }
 

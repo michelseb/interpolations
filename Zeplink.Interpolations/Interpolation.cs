@@ -11,6 +11,7 @@ namespace ZepLink.Interpolations
         public U Target { get; private set; }
         public float Duration { get; }
 
+        protected Action _onStart;
         protected Action _onEnd;
 
         public Interpolation(T reference, U origin, U target, float duration)
@@ -31,7 +32,10 @@ namespace ZepLink.Interpolations
             Duration = duration;
         }
 
-        public virtual void Init() { }
+        public virtual void Init() 
+        {
+            _onStart?.Invoke();
+        }
 
         public abstract void Process(float elapsedTime);
 
@@ -41,6 +45,12 @@ namespace ZepLink.Interpolations
         {
             Value = Target;
             _onEnd?.Invoke();
+        }
+
+        public virtual Interpolation<T, U> SetOnStart(Action onStart)
+        {
+            _onStart = onStart;
+            return this;
         }
 
         public virtual Interpolation<T, U> SetOnEnd(Action onEnd)

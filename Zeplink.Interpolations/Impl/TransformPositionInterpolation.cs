@@ -13,6 +13,8 @@ namespace ZepLink.Interpolations.Impl
 
         public override void Init()
         {
+            base.Init();
+
             if (_startAtPosition)
             {
                 Origin = Reference.position;
