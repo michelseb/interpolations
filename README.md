@@ -38,6 +38,14 @@ May you have any questions, email me at sebastien.michel60@gmail.com
 Sebastien MICHEL
 
 ## Version History
+* 4.0.0
+    * Introducing interpolation easings
+    * Defined for each interpolation
+        - Linear
+        - EaseIn
+        - EaseOut
+        - EaseInOut
+        - SmoothStep
 * 3.3.1
     * Fixing deferred init
 * 3.3.0
