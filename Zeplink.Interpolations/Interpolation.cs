@@ -1,4 +1,5 @@
 ﻿using System;
+using ZepLink.Interpolations.Easings;
 
 namespace ZepLink.Interpolations
 {
@@ -11,44 +12,49 @@ namespace ZepLink.Interpolations
         public Func<U> DeferredOrigin { get; protected set; }
         public Func<U> DeferredTarget { get; protected set; }
         public float Duration { get; }
+        public Easing Easing { get; }
 
         protected Action _onStart;
         protected Action _onEnd;
 
-        public Interpolation(T reference, U origin, U target, float duration)
+        public Interpolation(T reference, U origin, U target, float duration, EasingType easingType = EasingType.Linear)
         {
             Reference = reference;
             Value = origin;
             Origin = origin;
             Target = target;
             Duration = duration;
+            Easing = EasingFactory.Get(easingType);
         }
 
-        public Interpolation(T reference, U value, U origin, U target, float duration)
+        public Interpolation(T reference, U value, U origin, U target, float duration, EasingType easingType = EasingType.Linear)
         {
             Reference = reference;
             Value = value;
             Origin = origin;
             Target = target;
             Duration = duration;
+            Easing = EasingFactory.Get(easingType);
         }
 
-        public Interpolation(T reference, Func<U> origin, Func<U> target, float duration)
+        public Interpolation(T reference, Func<U> origin, Func<U> target, float duration, EasingType easingType = EasingType.Linear)
         {
             Reference = reference;
             Value = origin();
             DeferredOrigin = origin;
             DeferredTarget = target;
             Duration = duration;
+            Easing = EasingFactory.Get(easingType);
         }
 
-        public Interpolation(T reference, U value, Func<U> origin, Func<U> target, float duration)
+        public Interpolation(T reference, U value, Func<U> origin, Func<U> target, float duration, EasingType easingType = EasingType.Linear)
         {
             Reference = reference;
             Value = value;
             DeferredOrigin = origin;
             DeferredTarget = target;
             Duration = duration;
+            Easing = EasingFactory.Get(easingType);
         }
 
         public virtual void Init()
@@ -67,6 +73,11 @@ namespace ZepLink.Interpolations
         }
 
         public abstract void Process(float elapsedTime);
+
+        public virtual float GetT(float elapsedTime)
+        {
+            return Easing.GetT(elapsedTime / Duration);
+        }
 
         public abstract void Apply();
 

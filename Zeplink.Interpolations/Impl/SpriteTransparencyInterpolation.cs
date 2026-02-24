@@ -1,12 +1,14 @@
 ﻿using System;
 using UnityEngine;
+using ZepLink.Interpolations.Easings;
 
 namespace ZepLink.Interpolations.Impl
 {
     public class SpriteTransparencyInterpolation : Interpolation<SpriteRenderer, float>
     {
-        public SpriteTransparencyInterpolation(SpriteRenderer reference, Func<float> origin, Func<float> target, float duration) : base(reference, origin, target, duration) { }
-        public SpriteTransparencyInterpolation(SpriteRenderer reference, float origin, float target, float duration) : base(reference, origin, target, duration) { }
+        public SpriteTransparencyInterpolation(SpriteRenderer reference, Func<float> origin, Func<float> target, float duration, EasingType easingType = EasingType.Linear) : base(reference, origin, target, duration, easingType) { }
+        public SpriteTransparencyInterpolation(SpriteRenderer reference, float origin, float target, float duration, EasingType easingType = EasingType.Linear) : base(reference, origin, target, duration, easingType) { }
+        public SpriteTransparencyInterpolation(SpriteRenderer reference, float target, float duration, EasingType easingType = EasingType.Linear) : base(reference, reference.color.a, target, duration, easingType) { }
 
         private Color _referenceColor;
 
@@ -25,7 +27,7 @@ namespace ZepLink.Interpolations.Impl
 
         public override void Process(float elapsedTime)
         {
-            Value = Mathf.Lerp(Origin, Target, elapsedTime / Duration);
+            Value = Mathf.Lerp(Origin, Target, GetT(elapsedTime));
         }
     }
 }

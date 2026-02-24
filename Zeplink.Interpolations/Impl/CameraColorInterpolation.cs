@@ -1,12 +1,13 @@
 ﻿using System;
 using UnityEngine;
+using ZepLink.Interpolations.Easings;
 
 namespace ZepLink.Interpolations.Impl
 {
     public class CameraColorInterpolation : Interpolation<Camera, Color>
     {
-        public CameraColorInterpolation(Camera reference, Func<Color> origin, Func<Color> target, float duration) : base(reference, origin, target, duration) { }
-        public CameraColorInterpolation(Camera reference, Color origin, Color target, float duration) : base(reference, origin, target, duration) { }
+        public CameraColorInterpolation(Camera reference, Func<Color> origin, Func<Color> target, float duration, EasingType easingType = EasingType.Linear) : base(reference, origin, target, duration, easingType) { }
+        public CameraColorInterpolation(Camera reference, Color origin, Color target, float duration, EasingType easingType = EasingType.Linear) : base(reference, origin, target, duration, easingType) { }
 
         public override void Apply()
         {
@@ -15,7 +16,7 @@ namespace ZepLink.Interpolations.Impl
 
         public override void Process(float elapsedTime)
         {
-            Value = Color.Lerp(Origin, Target, elapsedTime / Duration);
+            Value = Color.Lerp(Origin, Target, GetT(elapsedTime));
         }
     }
 }
