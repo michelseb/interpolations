@@ -38,6 +38,8 @@ May you have any questions, email me at sebastien.michel60@gmail.com
 Sebastien MICHEL
 
 ## Version History
+* 4.1.0
+    * Being able to replace current interpolation
 * 4.0.0
     * Introducing interpolation easings
     * Defined for each interpolation

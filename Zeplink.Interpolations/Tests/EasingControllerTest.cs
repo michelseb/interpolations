@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using ZepLink.Interpolations.Easings;
 
@@ -9,7 +8,6 @@ namespace ZepLink.Interpolations.Impl
     public class EasingControllerTest : MonoBehaviour
     {
         private InterpolationController _controller;
-        private SpriteRenderer _renderer;
 
         [SerializeField] private EasingType _easing;
         [SerializeField][Range(0, 2)] private float _animationDuration;
@@ -18,7 +16,6 @@ namespace ZepLink.Interpolations.Impl
         private void Awake()
         {
             _controller = GetComponent<InterpolationController>();
-            _renderer = GetComponent<SpriteRenderer>();
         }
 
         private void Start()

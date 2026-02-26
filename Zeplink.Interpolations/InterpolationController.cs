@@ -7,10 +7,12 @@ namespace ZepLink.Interpolations
     public class InterpolationController : MonoBehaviour
     {
         private Queue<IInterpolation> _queue;
+        private IDictionary<Type, Coroutine> _oneShotInterpolations;
 
         private void Awake()
         {
             _queue = new Queue<IInterpolation>();
+            _oneShotInterpolations = new Dictionary<Type, Coroutine>();
         }
 
         private void Start()
@@ -18,9 +20,16 @@ namespace ZepLink.Interpolations
             StartCoroutine(InterpolationHelper.ExecuteQueue(_queue));
         }
 
-        public void Run(IInterpolation interpolation, Action onEnd = null)
+        public void Run(IInterpolation interpolation, Action onEnd = null, bool stopPrevious = true)
         {
-            StartCoroutine(InterpolationHelper.Interpolate(interpolation, onEnd));
+            var interpolationType = interpolation.GetType();
+
+            if (stopPrevious && _oneShotInterpolations.ContainsKey(interpolationType))
+            {
+                StopCoroutine(_oneShotInterpolations[interpolationType]);
+            }
+
+            _oneShotInterpolations[interpolationType] = StartCoroutine(InterpolationHelper.Interpolate(interpolation, onEnd));
         }
 
         public void AddToQueue(IInterpolation interpolation)
